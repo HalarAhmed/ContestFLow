@@ -17,6 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && playwright install chromium
 
 COPY . .
+# OpenSSL 3 in Debian Bookworm uses SECLEVEL=2; Atlas can respond with TLSV1_ALERT_INTERNAL_ERROR.
+# Use SECLEVEL=1 so the TLS handshake succeeds (still secure: TLS 1.2+, 80-bit min).
+ENV OPENSSL_CONF=/app/openssl-seclevel1.cnf
 ENV PORT=8000
 EXPOSE 8000
 CMD ["sh", "-c", "python run_api.py"]

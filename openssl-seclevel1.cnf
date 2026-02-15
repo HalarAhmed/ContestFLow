@@ -1,0 +1,12 @@
+# OpenSSL 3: use security level 1 so TLS handshake works with MongoDB Atlas.
+# Atlas can fail with TLSV1_ALERT_INTERNAL_ERROR (SSL alert 80) when client uses SECLEVEL=2 (e.g. Debian Bookworm).
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+CipherString = DEFAULT@SECLEVEL=1
