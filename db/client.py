@@ -24,12 +24,14 @@ def get_client() -> MongoClient:
         uri = settings.MONGODB_URI or ""
         if "mongodb+srv://" in uri:
             try:
+                import ssl
                 import certifi
                 ca_path = certifi.where()
-                kwargs["tlsCAFile"] = ca_path
-                # Ensure default SSL context uses same CA (helps avoid TLSV1_ALERT_INTERNAL_ERROR on Windows).
                 os.environ.setdefault("SSL_CERT_FILE", ca_path)
                 os.environ.setdefault("REQUESTS_CA_BUNDLE", ca_path)
+                # Explicit SSL context with certifi CA; avoids TLSV1_ALERT_INTERNAL_ERROR on Render/Linux.
+                ctx = ssl.create_default_context(cafile=ca_path)
+                kwargs["ssl_context"] = ctx
             except ImportError:
                 pass
         _client = MongoClient(uri, **kwargs)
