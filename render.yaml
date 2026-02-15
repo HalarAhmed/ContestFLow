@@ -1,0 +1,42 @@
+# Deploy to Render with Docker (Playwright + Chromium for contest registration).
+# Required: MONGODB_URI, MONGODB_DB. Set Root Directory to "codeforces" if app is in a codeforces/ subfolder.
+services:
+  - type: web
+    name: cp-assistant
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        sync: false
+      - key: CODEFORCES_HANDLE
+        sync: false
+      - key: LEETCODE_USERNAME
+        sync: false
+      - key: USER_TIMEZONE
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: NOTIFICATION_EMAIL
+        sync: false
+      - key: CODEFORCES_PASSWORD
+        sync: false
+      - key: LEETCODE_PASSWORD
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: REGISTER_HEADLESS
+        value: "true"
+      - key: DISABLE_SCHEDULER
+        sync: false
