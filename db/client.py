@@ -1,4 +1,5 @@
 """MongoDB connection and database access."""
+import os
 import sys
 from typing import TYPE_CHECKING
 
@@ -26,12 +27,9 @@ def get_client() -> MongoClient:
                 import certifi
                 ca_path = certifi.where()
                 kwargs["tlsCAFile"] = ca_path
-                # On Windows, Python 3.12+ can fail with TLSV1_ALERT_INTERNAL_ERROR;
-                # force SSL to use the same CA bundle everywhere.
-                if sys.platform == "win32":
-                    import os
-                    os.environ["SSL_CERT_FILE"] = ca_path
-                    os.environ["REQUESTS_CA_BUNDLE"] = ca_path
+                # Ensure default SSL context uses same CA (helps avoid TLSV1_ALERT_INTERNAL_ERROR on Windows).
+                os.environ.setdefault("SSL_CERT_FILE", ca_path)
+                os.environ.setdefault("REQUESTS_CA_BUNDLE", ca_path)
             except ImportError:
                 pass
         _client = MongoClient(uri, **kwargs)

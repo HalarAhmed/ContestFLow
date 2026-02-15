@@ -1,5 +1,6 @@
 # Deploy to Render with Docker (Playwright + Chromium for contest registration).
-# Required: MONGODB_URI, MONGODB_DB. Set Root Directory to "codeforces" if app is in a codeforces/ subfolder.
+# Repo layout: (repo root)/codeforces/codeforces/ has Dockerfile, run_api.py, api/, etc.
+# Required: MONGODB_URI, MONGODB_DB. In Render dashboard set Root Directory to: codeforces/codeforces
 services:
   - type: web
     name: cp-assistant
